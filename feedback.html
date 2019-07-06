@@ -70,6 +70,22 @@
   -webkit-transform: rotate(-30deg);
 }
 </style>
+<script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+
+
+<script type="text/javascript">
+// Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyB2r_WI6IO3hUBGlwTZ4sWESdiDzuvoFgs",
+    authDomain: "hack-ef9fa.firebaseapp.com",
+    databaseURL: "https://hack-ef9fa.firebaseio.com",
+    projectId: "hack-ef9fa",
+    storageBucket: "",
+    messagingSenderId: "659396117541",
+    appId: "1:659396117541:web:816ce8ae66f81859"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);</script>
 <script>
   var ser;
   var del
@@ -81,10 +97,27 @@ function delivery(num) {
 }
 function myfun()
 {
+  var na=document.getElementById("name").value;
+  var em=document.getElementById("email").value;
+  var ph=document.getElementById("phno").value;
+  var sub=document.getElementById("subject").value;
+  console.log(na);
+  console.log(em);
+  console.log(ph)
   console.log(ser);
   console.log(del);
+  console.log(sub);
+  var Ref = firebase.database().ref("feedback/");
+  Ref.set({
+    name: na,Email: em,Phone: ph,service:ser,delivery:del,Comment: sub
+  })
 }
-</script>
+
+  
+
+  </script>
+
+
 </head>
 <body>
   <div style="margin-left:10%;margin-right: 10%;margin-top: 10%;margin-bottom: 10% ;>
