@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- msrit Assist -->
+	<title>Order</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+	<script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+
+
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<script type="text/javascript" src="api.js"></script>
+
+	<script type="text/javascript">
+
+		var dt=[1];
+		var num=0;
+		function dbload()
+		{
+			
+
+			var ref = firebase.database().ref("vendor/");
+
+			ref.on("value", function(data) {
+				var str1 = window.localStorage.getItem("vendor");
+				dt = data.val()[str1]['item']
+  	// console.log(dt);
+  	dt = dt.split(',')
+  	num = dt.length;
+  	var node1 = document.getElementById('div1')
+  	for(i=0;i<dt.length;i++)
+  	{
+  		var node = document.createElement("h6");
+  		var textnode = document.createTextNode(dt[i]);
+  		node.appendChild(textnode);
+  		node.id = 'b'+i.toString();
+  		document.getElementById("div1").appendChild(node);
+  		var node = document.createElement("input");
+  		node.type = 'number';
+  		node.id = 'a'+i.toString();
+  		document.getElementById("div1").appendChild(node);
+
+  	}
+
+
+
+
+
+
+
+
+
+
+  })
+		}
+	</script>
+
+
+	<style type="text/css">
+		#div1 input{
+			border-radius: 20px;
+			width: 10%;
+		}
+
+
+	</style>
+</head>
+<body onload="dbload()";>
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="#">Gully Shop</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Home
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">About</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Services</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Contact</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Page Content -->
+
+	<center><h2 id ="exam_head" style="padding-top: 100px;">Order</h2>
+	</center>
+
+
+
+
+
+	<div class="row">
+		<div class="container" id="examf1" style="width:100%;">
+
+			<div class="panel-group" >
+				<div class="panel panel-primary" >
+					<!-- <div class="panel-heading">Blood Donors</div> -->
+
+
+
+					<div class="panel-body" >
+						<form id='form1'method="GET">
+
+							<div id="div1">
+								
+							</div>
+							<br>
+							<button type="button" style="background-color: green; display: block;" class="btn btn-primary" id='demo' onclick="get()">Get my location</button>
+
+							<p style="display: none;" id='demo1'><strong>Your loaction has been registered</strong></p>
+
+							<br>
+							<button type="button" class="btn btn-primary" onclick="putinfo()">Proceed</button>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+<script type="text/javascript">
+
+
+
+	var x = document.getElementById("demo");
+	var x1 = document.getElementById("demo1");
+	var lat;
+	var long;
+	function get() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		} else { 
+			x.innerHTML = "Geolocation is not supported by this browser.";
+		}
+	}
+
+	function showPosition(position) {
+		lat = position.coords.latitude ; 
+		long = position.coords.longitude;
+		// console.log(lat,long);
+		x.style.display = 'none';
+		x1.style.display = 'block';
+	}
+
+
+
+
+
+
+	function rand()
+	{
+		return Math.floor((Math.random() * 10) + 1).toString()
+	}
+	
+	var flag=1
+
+
+	function putinfo(){
+
+		
+// console.log(num)
+
+list={}
+for(i=0;i<num;i++)
+{
+	var a = document.getElementById('a'+i.toString()).value;
+	var b = document.getElementById('b'+i.toString()).innerHTML;
+
+	
+	list[b]=a
+
+}
+// console.log(list)
+var str1 = window.localStorage.getItem("vendor");
+var ref1 = firebase.database().ref("status");
+
+ref1.on('value',(snap)=>{
+	var dt = snap.val()
+	for(var key in dt)
+	{
+		if(key==str1)
+		{
+			if(dt[key]=='on')
+			{
+				var ref = firebase.database().ref("order");
+			
+			st1 = ''
+			for (var key in list)
+			{
+				st1+=key+'='+list[key]+','	
+
+
+			}
+
+
+			var ran =''
+			ran +=rand()
+			ran +=rand()
+			ran +=rand()
+			ref.update(
+			{
+				[ran]:{
+					id:str1,
+					item:st1,
+					lat:lat,
+					long:long
+				}
+			})
+// console.log(st1)
+// var phno = window.localStorage.getItem("user");
+// var url = 'https://api.textlocal.in/send/?apikey=sBUphuS0ofs-DRpSo48M9GSQ346ZF17nBvyVmTY3VD&numbers=91'+phno+'&message='
+// var sms = 'Hi. A new order for '+st1+' has been received from phone number : '+phno+'. Kindly place a call to the user to accept the order.'
+// url+=sms
+url='https://api.textlocal.in/send/?apikey=sBUphuS0ofs-DRpSo48M9GSQ346ZF17nBvyVmTY3VD&message=Greetings%20from%20CSI%20VIT!%0ARound%201%20is%20now%20live!%20Go%20to%20ccs.csivit.com%20and%20participate.%20Stand%20a%20chance%20to%20be%20a%20part%20of%20the%20most%20exclusive%20chapter%20in%20VIT!&sender=CSIVIT&numbers=917010984177'
+
+window.open(url);
+
+
+}
+else
+{
+	alert('Sorry vendor is unavailable')
+}
+
+}
+}
+
+})
+
+
+
+
+}
+
+</script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</html>
